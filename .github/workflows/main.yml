@@ -1,0 +1,46 @@
+name: Create Feature Branch, Add Folder, and Copy Code from Another Repo
+
+on:
+  workflow_dispatch:  # Trigger manually via GitHub UI
+
+jobs:
+  create-branch-and-copy-code:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout the repository on DEV branch
+      uses: actions/checkout@v4
+      with:
+        ref: dev  # Checkout the DEV branch
+
+    - name: Create a new feature branch from DEV
+      run: |
+        git checkout -b feature/feature-branch  
+
+    - name: Create a folder in the feature branch
+      run: |
+        mkdir -p new-folder  
+        echo "Folder created" 
+
+    - name: Add another repository as a remote
+      run: |
+        git remote add other-repo https://github.com/goremedical/mde-databricks.git  
+        git fetch other-repo  # Fetch the branches of the other repo
+
+    - name: Checkout the branch from the other repository
+      run: |
+        git checkout -b feature/feature-branch dev  # Replace with the branch name from the other repository
+
+    - name: Copy code from the other repository to the new folder
+      run: |
+        cp -r * ../new-folder/  # Copy code from other repo's branch to the new folder in the feature branch
+        # Optionally: exclude hidden files or specific files if needed
+
+    - name: Add and commit changes
+      run: |
+        git add .  # Add all the new changes (including folder and copied code)
+        git commit -m "Add new folder and copy code from another repo"  # Commit the changes
+
+    - name: Push the feature branch
+      run: |
+        git push origin feature-branch  # Push the feature branch to the repository
