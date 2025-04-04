@@ -29,7 +29,7 @@ jobs:
     - name: Add another repository as a remote
       run: |
         git clone https://github.com/akshayvats7/Youtube-Data-Analysis.git 
-        git fetch master  # Fetch the branches of the other repo
+        git fetch Youtube-Data-Analysis  # Fetch the branches of the other repo
 
     - name: Checkout the branch from the other repository
       run: |
