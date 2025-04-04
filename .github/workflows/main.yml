@@ -11,7 +11,7 @@ jobs:
     - name: Checkout the repository on DEV branch
       uses: actions/checkout@v4
       with:
-        ref: dev  # Checkout the DEV branch
+        ref: master  # Checkout the DEV branch
 
     - name: Create a new feature branch from DEV
       run: |
