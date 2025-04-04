@@ -24,12 +24,12 @@ jobs:
 
     - name: Add another repository as a remote
       run: |
-        git remote add other-repo https://github.com/goremedical/mde-databricks.git  
+        git remote add other-repo https://github.com/akshayvats7/Youtube-Data-Analysis.git 
         git fetch other-repo  # Fetch the branches of the other repo
 
     - name: Checkout the branch from the other repository
       run: |
-        git checkout -b feature/feature-branch dev  # Replace with the branch name from the other repository
+        git checkout -b feature/feature-branch master  # Replace with the branch name from the other repository
 
     - name: Copy code from the other repository to the new folder
       run: |
