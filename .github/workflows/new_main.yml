@@ -25,7 +25,7 @@ jobs:
 
     - name: Read commit hash from .env file
       run: |
-        echo "COMMIT_HASH=$(grep COMMIT_HASH .env | cut -d '=' -f2)" >> $GITHUB_ENV  # Load commit hash into environment variable
+        echo "COMMIT_HASH=$(grep COMMIT_HASH commit.env | cut -d '=' -f2)" >> $GITHUB_ENV  # Load commit hash into environment variable
 
     - name: Clone the other repository and checkout specific commit
       run: |
