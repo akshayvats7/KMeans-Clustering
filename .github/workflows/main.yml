@@ -13,10 +13,6 @@ jobs:
       with:
         ref: master  # Checkout the MASTER branch of the current repository
 
-    - name: Check the list of branches
-      run: |
-        git branch -a  # Check all branches (local + remote)
-
     - name: Create a new feature branch from MASTER
       run: |
         git checkout -b feature-branch  # Create and switch to the feature branch from master
@@ -24,22 +20,19 @@ jobs:
 
     - name: Create a folder in the feature branch
       run: |
-        mkdir -p new-folder  # Create the new folder in the feature branch
+        mkdir -p new-folder  # Create a new folder in the feature branch
         echo "Folder created" > new-folder/readme.txt  # Create a dummy file to ensure the folder gets added
 
-    - name: Add another repository as a remote
+    - name: Clone the other repository and checkout master branch
       run: |
-        git remote add other-repo https://github.com/akshayvats7/Youtube-Data-Analysis.git  # Add the other repository as a remote
-        git fetch other-repo  # Fetch all branches of the other repository
+        git clone https://github.com/akshayvats7/Youtube-Data-Analysis.git  # Clone the other repository
+        cd Youtube-Data-Analysis
+        git checkout master  # Checkout the master branch of the other repository
 
-    - name: Checkout the master branch from the other repository
+    - name: Copy code from the other repository's master branch to the new folder in feature branch
       run: |
-        git fetch other-repo master  # Fetch the master branch of the other repo
-        git checkout -b other-repo-master other-repo/master  # Create and checkout a branch based on the master branch of the other repo
-
-    - name: Copy code from the other repository to the new folder
-      run: |
-        cp -r * ../new-folder/  # Copy content from the other repo's master branch into the new folder
+        cp -r ./Youtube-Data-Analysis/* ./new-folder/  # Copy content from the other repo's master branch into the new folder in the feature branch
+        cd ..  # Return to the root of the current repository
 
     - name: Add and commit changes
       run: |
