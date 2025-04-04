@@ -1,0 +1,57 @@
+name: new_workflow
+
+on:
+  workflow_dispatch:  # Trigger manually via GitHub UI
+
+jobs:
+  create-branch-and-copy-code:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout the repository on MASTER branch
+      uses: actions/checkout@v4
+      with:
+        ref: master  # Checkout the MASTER branch of the current repository
+
+    - name: Create a new feature branch from MASTER
+      run: |
+        git checkout -b feature-branch  # Create and switch to the feature branch from master
+        git branch  # Confirm the branch is created and switched
+
+    - name: Create a folder in the feature branch
+      run: |
+        mkdir -p new-folder  # Create a new folder in the feature branch
+        echo "Folder created" > new-folder/readme.txt  # Create a dummy file to ensure the folder gets added
+
+    - name: Read commit hash from .env file
+      run: |
+        echo "COMMIT_HASH=$(grep COMMIT_HASH .env | cut -d '=' -f2)" >> $GITHUB_ENV  # Load commit hash into environment variable
+
+    - name: Clone the other repository and checkout specific commit
+      run: |
+        git clone https://github.com/akshayvats7/Youtube-Data-Analysis.git  # Clone the other repository
+        cd Youtube-Data-Analysis
+        git checkout $COMMIT_HASH  # Checkout the specific commit using the dynamic COMMIT_HASH variable
+        cd ..  # Return to the root of the current repository
+
+    - name: Copy code from the other repository's specific commit to the new folder in feature branch
+      run: |
+        cp -r ./Youtube-Data-Analysis/* ./new-folder/  # Copy content from the specific commit into the new folder in the feature branch
+
+    - name: Delete the cloned repository
+      run: |
+        rm -rf Youtube-Data-Analysis  # Delete the cloned repository to clean up the workspace
+
+    - name: Configure Git user
+      run: |
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"  # Set the name and email for the commit author
+
+    - name: Add and commit changes
+      run: |
+        git add .  # Stage all changes (new folder + copied files)
+        git commit -m "Add new folder and copy code from another repo"  # Commit the changes
+
+    - name: Push the feature branch
+      run: |
+        git push origin feature-branch  # Push the feature branch to the current repository
