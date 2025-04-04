@@ -13,9 +13,13 @@ jobs:
       with:
         ref: master  # Checkout the DEV branch
 
+    - name: Check the list of branches 
+      run: |
+        git branch -a
+
     - name: Create a new feature branch from DEV
       run: |
-        git checkout -b feature/feature-branch  
+        git branch feature-branch  
 
     - name: Create a folder in the feature branch
       run: |
@@ -24,7 +28,7 @@ jobs:
 
     - name: Add another repository as a remote
       run: |
-        git remote add other-repo https://github.com/akshayvats7/Youtube-Data-Analysis.git 
+        git clone https://github.com/akshayvats7/Youtube-Data-Analysis.git 
         git fetch other-repo  # Fetch the branches of the other repo
 
     - name: Checkout the branch from the other repository
