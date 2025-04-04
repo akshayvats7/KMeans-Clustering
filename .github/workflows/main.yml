@@ -11,40 +11,41 @@ jobs:
     - name: Checkout the repository on MASTER branch
       uses: actions/checkout@v4
       with:
-        ref: master  # Checkout the MASTER branch
+        ref: master  # Checkout the MASTER branch of the current repository
 
-    - name: Check the list of branches 
+    - name: Check the list of branches
       run: |
-        git branch -a
+        git branch -a  # Check all branches (local + remote)
 
     - name: Create a new feature branch from MASTER
       run: |
-        git branch feature-branch  
-
-    - name: Checkout the branch from the other repository
-      run: |
-        git checkout feature-branch  
+        git checkout -b feature-branch  # Create and switch to the feature branch from master
+        git branch  # Confirm the branch is created and switched
 
     - name: Create a folder in the feature branch
       run: |
-        mkdir -p new-folder  
-        echo "Folder created" 
+        mkdir -p new-folder  # Create the new folder in the feature branch
+        echo "Folder created" > new-folder/readme.txt  # Create a dummy file to ensure the folder gets added
 
     - name: Add another repository as a remote
       run: |
-        git clone https://github.com/akshayvats7/Youtube-Data-Analysis.git 
-        git fetch Youtube-Data-Analysis  
+        git remote add other-repo https://github.com/akshayvats7/Youtube-Data-Analysis.git  # Add the other repository as a remote
+        git fetch other-repo  # Fetch all branches of the other repository
+
+    - name: Checkout the master branch from the other repository
+      run: |
+        git fetch other-repo master  # Fetch the master branch of the other repo
+        git checkout -b other-repo-master other-repo/master  # Create and checkout a branch based on the master branch of the other repo
 
     - name: Copy code from the other repository to the new folder
       run: |
-        cp -r * ../new-folder/  # Copy code from other repo's branch to the new folder in the feature branch
-        # Optionally: exclude hidden files or specific files if needed
+        cp -r * ../new-folder/  # Copy content from the other repo's master branch into the new folder
 
     - name: Add and commit changes
       run: |
-        git add .  # Add all the new changes (including folder and copied code)
+        git add .  # Stage all changes (new folder + copied files)
         git commit -m "Add new folder and copy code from another repo"  # Commit the changes
 
     - name: Push the feature branch
       run: |
-        git push origin feature-branch  # Push the feature branch to the repository
+        git push origin feature-branch  # Push the feature branch to the current repository
