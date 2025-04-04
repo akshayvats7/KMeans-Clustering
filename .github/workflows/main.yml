@@ -8,18 +8,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout the repository on DEV branch
+    - name: Checkout the repository on MASTER branch
       uses: actions/checkout@v4
       with:
-        ref: master  # Checkout the DEV branch
+        ref: master  # Checkout the MASTER branch
 
     - name: Check the list of branches 
       run: |
         git branch -a
 
-    - name: Create a new feature branch from DEV
+    - name: Create a new feature branch from MASTER
       run: |
         git branch feature-branch  
+
+    - name: Checkout the branch from the other repository
+      run: |
+        git checkout feature-branch  
 
     - name: Create a folder in the feature branch
       run: |
@@ -29,11 +33,7 @@ jobs:
     - name: Add another repository as a remote
       run: |
         git clone https://github.com/akshayvats7/Youtube-Data-Analysis.git 
-        git fetch Youtube-Data-Analysis  # Fetch the branches of the other repo
-
-    - name: Checkout the branch from the other repository
-      run: |
-        git checkout -b feature-branch  # Replace with the branch name from the other repository
+        git fetch Youtube-Data-Analysis  
 
     - name: Copy code from the other repository to the new folder
       run: |
